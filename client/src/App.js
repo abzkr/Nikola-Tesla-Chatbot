@@ -21,6 +21,7 @@ function App() {
   return (
     <div className="App">
       <LandingPage />
+      <h1>Server Status: {status}</h1>
     </div>
   );
 }

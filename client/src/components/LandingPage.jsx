@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createUserMessage, createTeslaMessage } from './Message.jsx';
 import PromptBox from './PromptBox.jsx';
 import ChatUI from './ChatUI.jsx';
+import AccessibilityMenu from './AccessibilityMenu.jsx';
 
 
 const LandingPage = () => {
@@ -10,20 +11,31 @@ const LandingPage = () => {
 
 
 
-    // Change conversation history to messages once you have succesfully connected to the backend
 
-    console.log(" LandingPage is succesfully rendering ");
 
-    // Handles user prompts and
+    // Handles user prompts / fetches responses from server/API endpoint
     const handleUserPrompt = async (userPrompt) => {
 
         const UserMessage = createUserMessage(userPrompt);
+        
+        // const conversationHistory = [...messages, UserMessage];
+
+        // We initialise the conversation history with messages so we can ensure that it is up to date before sending to server
+        // This is a fix to our previous issue of the conversation history being out of sync and prompt not being sent to the s
+        
+        // Convert frontend format to backend format (Simplified)
+        // Include the new user message so the history sent to the server is up-to-date
+        const newHistory = [...messages, UserMessage];
+        const conversationHistory = newHistory.map(msg => ({
+            role: (msg.sender && typeof msg.sender === 'string' && msg.sender.toLowerCase().startsWith('user')) ? 'user' : 'assistant',
+            content: msg.text
+        }));
+
+        
+
         setMessages(prev => [...prev, UserMessage]);
         setChatActive(true);
-
-        // Build the conversation history including the just-created user message
-        const conversationHistory = [...messages, UserMessage];
-
+      
         try {
             const response = await fetch('http://localhost:5000/api/chat', {
                 method: 'POST',
@@ -37,9 +49,17 @@ const LandingPage = () => {
             }
 
             const data = await response.json();
-            const TeslaBotReply = createTeslaMessage(data.reply || "(no reply)");
-            setMessages(prev => [...prev, TeslaBotReply]);
 
+            // Only append the assistant's response; user message was already added
+            const assistantReply = data.updatedConversationHistory[data.updatedConversationHistory.length - 1];
+            if (assistantReply && assistantReply.role === 'assistant') {
+                const teslaMessage = createTeslaMessage(assistantReply.content);
+                setMessages(prev => [...prev, teslaMessage]);
+            }
+            /*
+            const TeslaBotReply = createTeslaMessage(data.reply);
+            setMessages(prev => [...prev, TeslaBotReply]);
+            */
         } catch (error) {
             console.error('Error communicating with server:', error);
             const errorMessage = createTeslaMessage("Sorry, I'm having trouble responding right now!");
@@ -88,19 +108,17 @@ const LandingPage = () => {
 
             {!chatActive && (
             <>
-                 <img src="/nikola_head.png" 
+                <img src="/nikola_head.png" 
                 alt="Nikola Tesla Chatbot" 
                 style={{ 
                     position : 'relative',
                     height: '200px', 
                     width: '200px' }}
                 />
-                <h2>
-                    Talk to Nikola Tesla
+                <h2>  
+                     Ask me about my inventions, experiments, and vision for the future of electricity!⚡
+
                 </h2>
-                <p>  
-                     Ask me about my inventions, experiments, and vision for the future of electricity
-                </p>
             </>
             )}
 
@@ -115,12 +133,14 @@ const LandingPage = () => {
                     gap: '12px',
                     marginTop: '20px'
                 }}>
+                    <AccessibilityMenu />
                     <ChatUI messages={messages} />
                     <PromptBox onSubmit={handleUserPrompt} />
                 </div>
             ) : (
                 /* When chat is not active, keep the PromptBox below the intro */
                 <div style={{ width: '100%', marginTop: '20px' }}>
+                    <AccessibilityMenu />
                     <PromptBox onSubmit={handleUserPrompt} />
                 </div>
             )}

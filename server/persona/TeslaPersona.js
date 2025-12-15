@@ -89,7 +89,7 @@ const teslaPersona = {
         },
         {
           text: "Greetings. Nikola Tesla at your service. Ask, and I shall do my best to provide a spark of insight.",
-          probability: 0.3,
+          probability: 0.2,
         },
         {
           text: "Ah, a new mind seeking answers. What subject of science or invention intrigues you?",

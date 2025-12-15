@@ -1,0 +1,80 @@
+.chat-header,
+.chat-body {
+  margin-top: 0px;
+  width: min(1200px, 100%);
+  margin: 0 auto;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* shared width source of truth */
+  width: min(1200px, 100%);
+  margin: 0 auto;
+
+  /* optional visual polish */
+  box-sizing: border-box;
+}
+
+ 
+.chat-header {
+  text-align: center;
+  margin-bottom: 0;
+  margin-top: 20px;
+  width: 1000x;
+  max-width: 100%;
+}
+ 
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  background: #6B7B9E;  /* Slate blue background */
+  padding: 12px 20px;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid #586887;
+  border-bottom: none;
+}
+ 
+.header-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  flex-shrink: 0;
+}
+ 
+.header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+ 
+.chat-header h1 {
+  color: #ffffff;
+  font-size: 1.3em;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+ 
+.online-text {
+  color: #ffffff;
+  font-size: 0.75em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+ 
+.online-status {
+  color: #00FF00;  /* Green pulsing dot */
+  font-size: 1.2em;
+  line-height: 1;
+  animation: pulse 2s ease-in-out infinite;
+}
+ 

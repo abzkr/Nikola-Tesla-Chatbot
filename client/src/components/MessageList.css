@@ -4,14 +4,15 @@ where all the messages show up.*/
 .message-list {
   flex-grow: 1;
   overflow-y: auto;
-  padding: 10px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-  height: 400px;
+  padding: 0;                 /* remove inner padding to match body */
+  margin: 0;                  /* remove extra margin */
+  height: 400px;              /* keep fixed height or adjust */
   display: flex;
   flex-direction: column;
-  background-color: #f9fafb;
-  border-radius: 8px;
+  background-color: transparent; /* transparent so chat-body bg shows through */
+  border: none;               /* remove border */
+  border-radius: 0;           /* remove rounding */
+  box-sizing: border-box;
 }
 
 /* Text that appears when there are no messages yet */
